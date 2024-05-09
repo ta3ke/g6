@@ -19,6 +19,7 @@ localhost.key
 sqlite3.db
 *.db
 venv/
+.venv/
 plugin_states.json
 plugin_states.json.lock
 log_config.ini

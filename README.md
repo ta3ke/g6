@@ -35,17 +35,17 @@ cd g6
 
 ```bash
 # 가상환경을 만듭니다. 필수 설치 요소는 아닙니다.
-python -m venv venv
+python -m venv .venv
 # 또는
-python3 -m venv venv
+python3 -m venv .venv
 
 # Linux
-source venv/bin/activate
+source .venv/bin/activate
 
 # Windows
-source venv\Scripts\activate
+source .venv\Scripts\activate
 # 또는
-source venv/Scripts/activate
+source .venv/Scripts/activate
 ```
 
 ```bash
