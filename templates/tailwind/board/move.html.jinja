@@ -1,18 +1,23 @@
 {% extends "base_sub.html.jinja" %}
 
-{% block title %}게시물 {{ act }}{% endblock title %}
-
+{% block title %}
+  게시물 {{ act }}
+{% endblock title %}
 {% block content %}
   <div id="copymove" class="new_win">
     <h1 id="win_title">게시물 {{ act }}</h1>
-    <form name="fboardmoveall" method="post" action="{{ url_for('move_update') }}" onsubmit="return fboardmoveall_submit(this);">
+    <form name="fboardmoveall"
+          method="post"
+          action="{{ url_for("move_update") }}"
+          onsubmit="return fboardmoveall_submit(this);">
       <input type="hidden" name="sw" value="{{ sw }}" />
       <input type="hidden" name="act" value="{{ act }}" />
       <input type="hidden" name="bo_table" value="{{ current_board.bo_table }}" />
       <input type="hidden" name="wr_id_list" value="{{ wr_ids }}" />
-      <input type="hidden" name="url" value="{{ request.headers.get("referer", "") }}" />
+      <input type="hidden"
+             name="url"
+             value="{{ request.headers.get('referer', '') }}" />
       <input type="hidden" name="token" value="" />
-
       <div class="tbl_head01 tbl_wrap">
         <table>
           <caption>
@@ -22,7 +27,9 @@
             <tr>
               <th scope="col">
                 <label for="chkall" class="blind">현재 페이지 게시판 전체</label>
-                <input type="checkbox" id="chkall" onclick="if (this.checked) all_checked(true); else all_checked(false);" />
+                <input type="checkbox"
+                       id="chkall"
+                       onclick="if (this.checked) all_checked(true); else all_checked(false);" />
               </th>
               <th scope="col">게시판</th>
             </tr>
@@ -30,10 +37,15 @@
           <tbody>
             {% for board in boards %}
               {% set bo_table = board.bo_table %}
-              <tr class="{% if bo_table == current_board.bo_table %}copymove_currentbg{% endif %}">
+              <tr class="{% if bo_table == current_board.bo_table %}
+                           copymove_currentbg
+                         {% endif %}">
                 <td class="td_chk">
                   <label for="chk{{ loop.index }}" class="blind">{{ bo_table }}</label>
-                  <input type="checkbox" value="{{ bo_table }}" id="chk{{ loop.index }}" name="chk_bo_table[]" />
+                  <input type="checkbox"
+                         value="{{ bo_table }}"
+                         id="chk{{ loop.index }}"
+                         name="chk_bo_table[]" />
                 </td>
                 <td>
                   <label for="chk{{ loop.index }}">
@@ -48,17 +60,15 @@
           </tbody>
         </table>
       </div>
-
       <div class="win_btn">
         <input type="submit" value="{{ act }}" id="btn_submit" class="btn_submit" />
         <button type="button" class="btn_cancel btn_close">창닫기</button>
       </div>
     </form>
   </div>
-
   <script>
-    $(function () {
-      $('.win_btn button').click(function () {
+    $(function() {
+      $('.win_btn button').click(function() {
         window.close();
       });
     });

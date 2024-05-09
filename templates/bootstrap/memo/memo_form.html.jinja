@@ -1,4 +1,5 @@
 {% extends "base_sub.html.jinja" %}
+
 {% block title %}
   내 쪽지함
 {% endblock title %}
@@ -58,7 +59,9 @@
               <span class="blind">자동등록방지</span>
               <!-- Captcha Start -->
               <fieldset id="captcha" class="captcha">
+
                 {% include captcha_widget(request) ignore missing %}
+
               </fieldset>
               <!-- Captcha End -->
             </li>

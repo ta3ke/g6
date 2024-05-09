@@ -1,36 +1,51 @@
 {% extends "base.html.jinja" %}
-{% set query_params=request.query_params %}
 
-{% block title %}새글{% endblock title %}
-{% block subtitle %}새글{% endblock subtitle %}
-
+{% set query_params = request.query_params %}
+{% block title %}
+  새글
+{% endblock title %}
+{% block subtitle %}
+  새글
+{% endblock subtitle %}
 {% block content %}
   <!-- 전체게시물 검색 시작 { -->
   <fieldset id="new_sch" class="py-5 text-center mb-3 fs-5">
     <legend>상세검색</legend>
     <form name="fnew" method="get">
       <label for="gr_id" class="blind">그룹</label>
-      {{ get_group_select('gr_id', query_params.gr_id)|safe }}
-
+      {{ get_group_select('gr_id', query_params.gr_id) |safe }}
       <label for="view" class="blind">검색대상</label>
       <select name="view" id="view">
         <option value="">전체게시물</option>
-        <option value="write" {{ get_selected(query_params.view, "write") }}>원글만</option>
-        <option value="comment" {{ get_selected(query_params.view, "comment") }}>코멘트만</option>
+        <option value="write" {{ get_selected(query_params.view, "write") }}>원글만
+        </option>
+        <option value="comment" {{ get_selected(query_params.view, "comment") }}>코멘트만
+        </option>
       </select>
-      <label for="mb_id" class="blind">검색어<strong class="blind"> 필수</strong></label>
-      <input type="text" name="mb_id" value="{{ query_params.mb_id }}" id="mb_id" class="frm_input" size="40" />
-      <button type="submit" class="btn_submit"><i class="fa fa-search" aria-hidden="true"></i> 검색</button>
+      <label for="mb_id" class="blind">
+        검색어<strong class="blind">필수</strong>
+      </label>
+      <input type="text"
+             name="mb_id"
+             value="{{ query_params.mb_id }}"
+             id="mb_id"
+             class="frm_input"
+             size="40" />
+      <button type="submit" class="btn_submit">
+        <i class="fa fa-search" aria-hidden="true"></i> 검색
+      </button>
       <p>회원 아이디만 검색 가능</p>
     </form>
   </fieldset>
   <!-- } 전체게시물 검색 끝 -->
-
   <!-- 전체게시물 목록 시작 { -->
-  <form name="fnewlist" id="fnewlist" method="post" action="#" onsubmit="return fnew_submit(this);">
+  <form name="fnewlist"
+        id="fnewlist"
+        method="post"
+        action="#"
+        onsubmit="return fnew_submit(this);">
     <input type="hidden" name="view" value="{{ query_params.view }}" />
     <input type="hidden" name="token" value="" />
-
     <div class="admin_new_btn text-end">
       <button type="submit" title="선택삭제" class="btn_b01 btn fs-4">
         <i class="fa fa-regular fa-trash-can" aria-hidden="true"></i>
@@ -59,7 +74,11 @@
           {% for board_new in board_news %}
             <tr>
               <td class="td_chk chk_box">
-                <input type="checkbox" name="chk_bn_id[]" value="{{ board_new.bn_id }}" id="chk_bn_id_{{ loop.index }}" class="selec_chk" />
+                <input type="checkbox"
+                       name="chk_bn_id[]"
+                       value="{{ board_new.bn_id }}"
+                       id="chk_bn_id_{{ loop.index }}"
+                       class="selec_chk" />
                 <label for="chk_bn_id_{{ loop.index }}">
                   <span>&nbsp;</span>
                   <b class="blind">{{ board_new.num }}번</b>
@@ -81,13 +100,11 @@
         </tbody>
       </table>
     </div>
-
     {{ paging|safe }}
   </form>
-
   <script>
-    $(function () {
-      $('#all_chk').click(function () {
+    $(function() {
+      $('#all_chk').click(function() {
         $('[name="chk_bn_id[]"]').attr('checked', this.checked);
       });
     });

@@ -1,4 +1,5 @@
 {% extends "base.html.jinja" %}
+
 {% block head %}
   <link rel="stylesheet"
         href="{{ theme_asset(request, 'js/remodal/remodal.css') }}" />
@@ -263,7 +264,7 @@
           <!--            <input type="hidden"
                    id="action"
                    name="action"
-                   value="social_account_linking">-->
+                   value="social_account_linking" />-->
           <div class="connect-title">기존 계정에 연결하기</div>
           <div class="connect-desc">
             기존 아이디에 SNS 아이디를 연결합니다.
@@ -296,92 +297,97 @@
       </div>
     </div>
     <script>
-  const cf_cert_use = "{{config['cf_cert_use']}}";
-  const cf_cert_simple = "{{config['cf_cert_simple']}}";
-  const cf_cert_hp = "{{config['cf_cert_hp']}}";
-  const cf_cert_ipin = "{{config['cf_cert_ipin']|default_if_none('0')}}";
-  const cert_url = '';
-  const cert_type = '';
-  const is_register = '{{is_register}}';
+      const cf_cert_use = "{{config['cf_cert_use']}}";
+      const cf_cert_simple = "{{config['cf_cert_simple']}}";
+      const cf_cert_hp = "{{config['cf_cert_hp']}}";
+      const cf_cert_ipin = "{{config['cf_cert_ipin']|default_if_none('0')}}";
+      const cert_url = '';
+      const cert_type = '';
+      const is_register = '{{is_register}}';
 
-  $(function () {
-    // 모두선택
-    $('input[name=chk_all]').click(function () {
-      if ($(this).prop('checked')) {
-        $('input[name^=agree]').prop('checked', true);
-      } else {
-        $('input[name^=agree]').prop('checked', false);
-      }
-    });
+      $(function() {
+        // 모두선택
+        $('input[name=chk_all]').click(function() {
+          if ($(this).prop('checked')) {
+            $('input[name^=agree]').prop('checked', true);
+          } else {
+            $('input[name^=agree]').prop('checked', false);
+          }
+        });
 
-    $('#reg_zip_find').css('display', 'inline-block');
-    const pageTypeParam = 'pageType=register';
+        $('#reg_zip_find').css('display', 'inline-block');
+        const pageTypeParam = 'pageType=register';
 
-    //tooltip
-    $(document)
-      .on('click', '.tooltip_icon', function (e) {
-        $(this).next('.tooltip').fadeIn(400).css('display', 'inline-block');
-      })
-      .on('mouseout', '.tooltip_icon', function (e) {
-        $(this).next('.tooltip').fadeOut();
+        //tooltip
+        $(document)
+          .on('click', '.tooltip_icon', function(e) {
+            $(this).next('.tooltip').fadeIn(400).css('display', 'inline-block');
+          })
+          .on('mouseout', '.tooltip_icon', function(e) {
+            $(this).next('.tooltip').fadeOut();
+          });
       });
-  });
 
-  // submit 최종 폼체크
-  function fregisterform_submit(f) {
-    if (!f.agree.checked) {
-      alert('회원가입약관의 내용에 동의하셔야 회원가입 하실 수 있습니다.');
-      f.agree.focus();
-      return false;
-    }
+      // submit 최종 폼체크
+      function fregisterform_submit(f) {
+        if (!f.agree.checked) {
+          alert('회원가입약관의 내용에 동의하셔야 회원가입 하실 수 있습니다.');
+          f.agree.focus();
+          return false;
+        }
 
-    if (!f.agree2.checked) {
-      alert('개인정보 수집 및 이용의 내용에 동의하셔야 회원가입 하실 수 있습니다.');
-      f.agree2.focus();
-      return false;
-    }
+        if (!f.agree2.checked) {
+          alert('개인정보 수집 및 이용의 내용에 동의하셔야 회원가입 하실 수 있습니다.');
+          f.agree2.focus();
+          return false;
+        }
 
-    {% if (is_register == "" and config["cf_cert_use"] and config["cf_cert_req"]) %}
-    // 본인확인 체크
-    if (f.cert_no.value == '') {
-      alert('회원가입을 위해서는 본인확인을 해주셔야 합니다.');
-      return false;
-    }
-    {% endif %}
+        {
+          %
+          if (is_register == ""
+            and config["cf_cert_use"] and config["cf_cert_req"]) %
+        }
+        // 본인확인 체크
+        if (f.cert_no.value == '') {
+          alert('회원가입을 위해서는 본인확인을 해주셔야 합니다.');
+          return false;
+        } {
+          % endif %
+        }
 
-    // 닉네임 검사
-    if (is_register || f.mb_nick.defaultValue != f.mb_nick.value) {
-      const msg = reg_mb_nick_check();
-      if (msg) {
-        alert(msg);
-        f.reg_mb_nick.select();
-        return false;
+        // 닉네임 검사
+        if (is_register || f.mb_nick.defaultValue != f.mb_nick.value) {
+          const msg = reg_mb_nick_check();
+          if (msg) {
+            alert(msg);
+            f.reg_mb_nick.select();
+            return false;
+          }
+        }
+
+        // E-mail 검사
+        if (is_register || f.mb_email.defaultValue != f.mb_email.value) {
+          const msg = reg_mb_email_check();
+          if (msg) {
+            alert(msg);
+            f.reg_mb_email.select();
+            return false;
+          }
+        }
+
+        return true;
       }
-    }
 
-    // E-mail 검사
-    if (is_register || f.mb_email.defaultValue != f.mb_email.value) {
-      const msg = reg_mb_email_check();
-      if (msg) {
-        alert(msg);
-        f.reg_mb_email.select();
-        return false;
+      function flogin_submit(f) {
+        const mb_id = $.trim($(f).find('input[name=mb_id]').val()),
+          mb_password = $.trim($(f).find('input[name=mb_password]').val());
+
+        if (!mb_id || !mb_password) {
+          return false;
+        }
+
+        return true;
       }
-    }
-
-    return true;
-  }
-
-  function flogin_submit(f) {
-    const mb_id = $.trim($(f).find('input[name=mb_id]').val()),
-      mb_password = $.trim($(f).find('input[name=mb_password]').val());
-
-    if (!mb_id || !mb_password) {
-      return false;
-    }
-
-    return true;
-  }
     </script>
     <!-- } 회원정보 입력/수정 끝 -->
   {% endblock content %}

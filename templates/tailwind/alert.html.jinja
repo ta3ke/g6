@@ -1,11 +1,24 @@
-{% extends "base_sub.html.jinja" %} {% block title %} 경고창 {% endblock title %} {%
+{% extends "base_sub.html.jinja" %}
+
+{% block title %}
+  경고창
+{% endblock title %}
+{%
 block content %}
 <script>
   alert("{% for error in errors %}{{ error|safe }}{% endfor %}");
-  {% if url %}
-      document.location.href = "{{ url }}";
-  {% else %}
-      history.back();
-  {% endif %}
+  {
+    %
+    if url %
+  }
+  document.location.href = "{{ url }}";
+  {
+    %
+    else %
+  }
+  history.back();
+  {
+    % endif %
+  }
 </script>
 {% endblock content %}
