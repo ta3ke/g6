@@ -74,7 +74,7 @@ async def boardgroupmember_list(
         "current_page": current_page,
         "paging": get_paging(request, current_page, total_count, records_per_page),
     }
-    return templates.TemplateResponse("boardgroupmember_list.html", context)
+    return templates.TemplateResponse("boardgroupmember_list.html.jinja", context)
 
 
 @router.get("/boardgroupmember_form/{mb_id}")
@@ -106,7 +106,7 @@ async def board_form(
         "groups": groups,
         "allow_groups": allow_groups,
     }
-    return templates.TemplateResponse("boardgroupmember_form.html", context)
+    return templates.TemplateResponse("boardgroupmember_form.html.jinja", context)
 
 
 @router.post("/boardgroupmember_insert", dependencies=[Depends(validate_token)])

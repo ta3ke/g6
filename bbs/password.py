@@ -37,7 +37,7 @@ async def password(
         "bo_table": bo_table,
         "write": write,
     }
-    return templates.TemplateResponse("/bbs/password.html", context)
+    return templates.TemplateResponse("/bbs/password.html.jinja", context)
 
 
 @router.post("/password_check/{action}/{bo_table}/{wr_id}", dependencies=[Depends(validate_token)])

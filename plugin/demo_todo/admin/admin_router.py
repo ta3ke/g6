@@ -43,7 +43,7 @@ def show_todo(
         "request": request,
         "todo": todo,
     }
-    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/show.html", context)
+    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/show.html.jinja", context)
 
 
 @admin_router.get("/todos")
@@ -59,7 +59,7 @@ def show_todo_list(
         "request": request,
         "todos": todos,
     }
-    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/todos.html", context)
+    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/todos.html.jinja", context)
 
 
 @admin_router.get("/create")
@@ -74,7 +74,7 @@ def create_form(request: Request):
         "todo": todo,
         "content": f"Hello {module_name}",
     }
-    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/create.html", context)
+    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/create.html.jinja", context)
 
 
 @admin_router.post("/create", dependencies=[Depends(validate_token)])
@@ -108,7 +108,7 @@ def update_form(
         "todo": todo,
         "action_url": f"/admin/todo/update/{id}",
     }
-    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/create.html", context)
+    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/create.html.jinja", context)
 
 
 @admin_router.post("/update/{id}")

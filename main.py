@@ -13,13 +13,18 @@ from core.database import DBConnect, db_session
 from core.exception import (
     AlertException,
     regist_core_exception_handler,
-    template_response
+    template_response,
 )
 from core.middleware import should_run_middleware, regist_core_middleware
 from core.plugin import (
-    cache_plugin_state, cache_plugin_menu, get_plugin_state_change_time,
-    import_plugin_by_states, read_plugin_state, register_plugin,
-    register_plugin_admin_menu, register_statics
+    cache_plugin_state,
+    cache_plugin_menu,
+    get_plugin_state_change_time,
+    import_plugin_by_states,
+    read_plugin_state,
+    register_plugin,
+    register_plugin_admin_menu,
+    register_statics,
 )
 from core.template import register_theme_statics, TemplateService, UserTemplates
 from lib.common import *
@@ -64,6 +69,7 @@ load_dotenv()
 # TypeAdapter는 값을 특정 타입으로 변환하는 데 사용되는 유틸리티 클래스입니다.
 APP_IS_DEBUG = TypeAdapter(bool).validate_python(os.getenv("APP_IS_DEBUG", False))
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -73,6 +79,7 @@ async def lifespan(app: FastAPI):
     """
     yield
     scheduler.remove_flag()
+
 
 # APP_IS_DEBUG 값이 True일 경우, 디버그 모드가 활성화됩니다.
 app = FastAPI(debug=APP_IS_DEBUG, lifespan=lifespan)
@@ -95,9 +102,9 @@ import_plugin_by_states(plugin_states)
 register_plugin(plugin_states)
 register_statics(app, plugin_states)
 
-cache_plugin_state.__setitem__('info', plugin_states)
-cache_plugin_state.__setitem__('change_time', get_plugin_state_change_time())
-cache_plugin_menu.__setitem__('admin_menus', register_plugin_admin_menu(plugin_states))
+cache_plugin_state.__setitem__("info", plugin_states)
+cache_plugin_state.__setitem__("change_time", get_plugin_state_change_time())
+cache_plugin_menu.__setitem__("admin_menus", register_plugin_admin_menu(plugin_states))
 
 app.include_router(admin_router, prefix="/admin", tags=["admin"])
 app.include_router(install_router, prefix="/install", tags=["install"])
@@ -141,7 +148,9 @@ async def main_middleware(request: Request, call_next):
     try:
         if not url_path.startswith("/install"):
             if not os.path.exists(ENV_PATH):
-                raise AlertException(".env 파일이 없습니다. 설치를 진행해 주세요.", 400, "/install")
+                raise AlertException(
+                    ".env 파일이 없습니다. 설치를 진행해 주세요.", 400, "/install"
+                )
             # 기본환경설정 테이블 조회
             config = db.scalar(select(Config))
         else:
@@ -149,15 +158,15 @@ async def main_middleware(request: Request, call_next):
 
     except AlertException as e:
         context = {"request": request, "errors": e.detail, "url": e.url}
-        return template_response("alert.html", context, e.status_code)
+        return template_response("alert.html.jinja", context, e.status_code)
 
     except ProgrammingError as e:
         context = {
             "request": request,
             "errors": "DB 테이블 또는 설정정보가 존재하지 않습니다. 설치를 다시 진행해 주세요.",
-            "url": "/install"
+            "url": "/install",
         }
-        return template_response("alert.html", context, 400)
+        return template_response("alert.html.jinja", context, 400)
 
     # 기본환경설정 조회 및 설정
     request.state.config = config
@@ -188,9 +197,11 @@ async def main_middleware(request: Request, call_next):
         mb_id = re.sub("[^a-zA-Z0-9_]", "", cookie_mb_id)[:20]
         member = MemberService.create_by_id(db, mb_id)
         # 최고관리자는 보안상 자동로그인 기능을 사용하지 않는다.
-        if (not is_super_admin(request, mb_id)
-                and member.is_email_certify(bool(config.cf_use_email_certify))
-                and not member.is_intercept_or_leave()):
+        if (
+            not is_super_admin(request, mb_id)
+            and member.is_email_certify(bool(config.cf_use_email_certify))
+            and not member.is_intercept_or_leave()
+        ):
             # 쿠키에 저장된 키와 여러가지 정보를 조합하여 만든 키가 일치한다면 로그인으로 간주
             ss_mb_key = session_member_key(request, member)
             if request.cookies.get("ck_auto") == ss_mb_key:
@@ -201,7 +212,15 @@ async def main_middleware(request: Request, call_next):
         # 오늘 처음 로그인 이라면 포인트 지급 및 로그인 정보 업데이트
         ymd_str = datetime.now().strftime("%Y-%m-%d")
         if member.mb_today_login.strftime("%Y-%m-%d") != ymd_str:
-            insert_point(request, member.mb_id, config.cf_login_point, ymd_str + " 첫로그인", "@login", member.mb_id, ymd_str)
+            insert_point(
+                request,
+                member.mb_id,
+                config.cf_login_point,
+                ymd_str + " 첫로그인",
+                "@login",
+                member.mb_id,
+                ymd_str,
+            )
 
             member.mb_today_login = datetime.now()
             member.mb_login_ip = request.client.host
@@ -210,7 +229,9 @@ async def main_middleware(request: Request, call_next):
     # 로그인한 회원 정보
     request.state.login_member = member
     # 최고관리자 여부
-    request.state.is_super_admin = is_super_admin(request, getattr(member, "mb_id", None))
+    request.state.is_super_admin = is_super_admin(
+        request, getattr(member, "mb_id", None)
+    )
 
     # 접근가능/차단 IP 체크
     # - IP 체크 기능을 사용할 때 is_super_admin 여부를 확인하기 때문에 로그인 코드 이후에 실행
@@ -228,24 +249,28 @@ async def main_middleware(request: Request, call_next):
     # 자동로그인 쿠키 재설정
     # is_autologin과 세션을 확인해서 로그아웃 처리 이후 쿠키가 재설정되는 것을 방지
     if is_autologin and request.session.get("ss_mb_id"):
-        response.set_cookie(key="ck_mb_id", value=cookie_mb_id,
-                            max_age=age_1day * 30, domain=cookie_domain)
-        response.set_cookie(key="ck_auto", value=ss_mb_key,
-                            max_age=age_1day * 30, domain=cookie_domain)
+        response.set_cookie(
+            key="ck_mb_id",
+            value=cookie_mb_id,
+            max_age=age_1day * 30,
+            domain=cookie_domain,
+        )
+        response.set_cookie(
+            key="ck_auto", value=ss_mb_key, max_age=age_1day * 30, domain=cookie_domain
+        )
     # 접속자 기록
-    ck_visit_ip = request.cookies.get('ck_visit_ip', None)
+    ck_visit_ip = request.cookies.get("ck_visit_ip", None)
     if ck_visit_ip != current_ip:
-        response.set_cookie(key="ck_visit_ip", value=current_ip,
-                            max_age=age_1day, domain=cookie_domain)
+        response.set_cookie(
+            key="ck_visit_ip", value=current_ip, max_age=age_1day, domain=cookie_domain
+        )
         record_visit(request)
 
     try:
         # 현재 접속자 데이터 갱신
-        if (not request.state.is_super_admin
-                and not url_path.startswith("/admin")):
+        if not request.state.is_super_admin and not url_path.startswith("/admin"):
             current_login = db.scalar(
-                select(models.Login)
-                .where(models.Login.lo_ip == current_ip)
+                select(models.Login).where(models.Login.lo_ip == current_ip)
             )
             if current_login:
                 current_login.mb_id = getattr(member, "mb_id", "")
@@ -259,14 +284,18 @@ async def main_middleware(request: Request, call_next):
                         mb_id=getattr(member, "mb_id", ""),
                         lo_datetime=datetime.now(),
                         lo_location=url_path,
-                        lo_url=url_path)
+                        lo_url=url_path,
+                    )
                 )
             db.commit()
 
         # 현재 로그인한 이력 삭제
         config_time = timedelta(minutes=int(config.cf_login_minutes))
-        db.execute(delete(models.Login)
-                .where(models.Login.lo_datetime < datetime.now() - config_time))
+        db.execute(
+            delete(models.Login).where(
+                models.Login.lo_datetime < datetime.now() - config_time
+            )
+        )
         db.commit()
 
     except Exception as e:
@@ -275,6 +304,7 @@ async def main_middleware(request: Request, call_next):
     db.close()
 
     return response
+
 
 # 기본 실행할 미들웨어를 추가하는 함수
 # 함수는 반드시 main_middleware 함수의 아래에 위치해야 합니다.
@@ -299,17 +329,14 @@ async def index(request: Request, db: db_session):
     query_boards = (
         select(models.Board)
         .join(models.Board.group)
-        .where(models.Board.bo_device != 'mobile')
-        .order_by(
-            models.Group.gr_order,
-            models.Board.bo_order
-        )
+        .where(models.Board.bo_device != "mobile")
+        .order_by(models.Group.gr_order, models.Board.bo_order)
     )
     # 최고관리자가 아니라면 인증게시판 및 갤러리/공지사항 게시판은 제외
     if not request.state.is_super_admin:
         query_boards = query_boards.where(
-            models.Board.bo_use_cert == '',
-            models.Board.bo_table.notin_(['notice', 'gallery'])
+            models.Board.bo_use_cert == "",
+            models.Board.bo_table.notin_(["notice", "gallery"]),
         )
     boards = db.scalars(query_boards).all()
 
@@ -318,7 +345,7 @@ async def index(request: Request, db: db_session):
         "newwins": get_newwins_except_cookie(request),
         "boards": boards,
     }
-    return templates.TemplateResponse("/index.html", context)
+    return templates.TemplateResponse("/index.html.jinja", context)
 
 
 @app.post("/generate_token")
@@ -337,10 +364,7 @@ async def generate_token(request: Request) -> JSONResponse:
 
 
 @app.get("/device/change/{device}")
-async def device_change(
-    request: Request,
-    device: str = Path(...)
-) -> RedirectResponse:
+async def device_change(request: Request, device: str = Path(...)) -> RedirectResponse:
     """접속환경(디바이스) 변경
     - PC/모바일 버전을 강제로 변경합니다.
 
@@ -351,8 +375,7 @@ async def device_change(
     Returns:
         RedirectResponse: 이전 페이지로 리디렉션
     """
-    if (device in ["pc", "mobile"] 
-            and not TemplateService.get_responsive()):
+    if device in ["pc", "mobile"] and not TemplateService.get_responsive():
         if device == "pc":
             request.session["is_mobile"] = False
         else:

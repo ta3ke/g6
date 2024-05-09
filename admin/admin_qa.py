@@ -28,7 +28,7 @@ async def qa_config_form(request: Request, db: db_session):
     qa_config = db.scalar(select(QaConfig))
 
     return templates.TemplateResponse(
-        "qa_config_form.html", {"request": request, "qa_config": qa_config}
+        "qa_config_form.html.jinja", {"request": request, "qa_config": qa_config}
     )
 
 

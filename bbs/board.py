@@ -90,7 +90,7 @@ async def group_board_list(
         "boards": boards,
         "render_latest_posts": render_latest_posts
     }
-    return templates.TemplateResponse("/board/group.html", context)
+    return templates.TemplateResponse("/board/group.html.jinja", context)
 
 
 @router.get("/{bo_table}")
@@ -197,7 +197,7 @@ async def list_post(
         "next_spt": next_spt,
     }
     return templates.TemplateResponse(
-        f"/board/{board.bo_skin}/list_post.html", context)
+        f"/board/{board.bo_skin}/list_post.html.jinja", context)
 
 
 @router.post("/list_delete/{bo_table}", dependencies=[Depends(validate_token)])
@@ -283,7 +283,7 @@ async def move_post(
         "current_board": board,
         "wr_ids": ','.join(wr_ids)
     }
-    return templates.TemplateResponse("/board/move.html", context)
+    return templates.TemplateResponse("/board/move.html.jinja", context)
 
 
 @router.post("/move_update/", dependencies=[Depends(validate_token)])
@@ -401,7 +401,7 @@ async def move_update(
         "request": request,
         "errors": f"해당 게시물을 선택한 게시판으로 {act} 하였습니다."
     }
-    return templates.TemplateResponse("alert_close.html", context)
+    return templates.TemplateResponse("alert_close.html.jinja", context)
 
 
 @router.get("/write/{bo_table}", dependencies=[Depends(check_group_access)])
@@ -468,7 +468,7 @@ async def write_form_add(
         "write_max": board_config.write_max,
     }
     return templates.TemplateResponse(
-        f"/board/{board.bo_skin}/write_form.html", context)
+        f"/board/{board.bo_skin}/write_form.html.jinja", context)
 
 
 @router.get("/write/{bo_table}/{wr_id}", dependencies=[Depends(check_group_access)])
@@ -547,7 +547,7 @@ async def write_form_edit(
         "write_max": board_config.write_max,
     }
     return templates.TemplateResponse(
-        f"/board/{board.bo_skin}/write_form.html", context)
+        f"/board/{board.bo_skin}/write_form.html.jinja", context)
 
 
 @router.post(
@@ -1002,7 +1002,7 @@ async def read_post(
         "is_comment_write": board_config.is_comment_level(),
     }
     return templates.TemplateResponse(
-        f"/board/{board.bo_skin}/read_post.html", context)
+        f"/board/{board.bo_skin}/read_post.html.jinja", context)
 
 
 # 게시글 삭제

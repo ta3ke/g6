@@ -49,7 +49,7 @@ async def scrap_form(
         "bo_table": bo_table,
         "write": write,
     }
-    return templates.TemplateResponse("bbs/scrap_popin.html", context)
+    return templates.TemplateResponse("bbs/scrap_popin.html.jinja", context)
     
 
 @router.post("/scrap_popin_update/{bo_table}/{wr_id}", dependencies=[Depends(validate_token)])
@@ -185,7 +185,7 @@ async def scrap_list(
         "page": current_page,
         "paging": get_paging(request, current_page, total_records),
     }
-    return templates.TemplateResponse("bbs/scrap_list.html", context)
+    return templates.TemplateResponse("bbs/scrap_list.html.jinja", context)
 
 
 @router.get("/scrap_delete/{ms_id}", dependencies=[Depends(validate_token)])

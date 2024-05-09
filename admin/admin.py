@@ -154,4 +154,4 @@ async def base(request: Request, db: db_session):
         "total_point_count": total_point_count,
         "new_points": new_points,
     }
-    return templates.TemplateResponse("index.html", context)
+    return templates.TemplateResponse("index.html.jinja", context)

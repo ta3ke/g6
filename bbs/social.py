@@ -197,7 +197,7 @@ async def get_social_register_form(request: Request):
         "action_url": request.url_for('post_social_register'),
         "is_exists_email": is_exists_email,
     }
-    return templates.TemplateResponse("/social/social_register_member.html", {
+    return templates.TemplateResponse("/social/social_register_member.html.jinja", {
         "request": request,
         "config": config,
         "form": form_context,
@@ -314,7 +314,7 @@ async def post_social_register(
     if config.cf_use_email_certify:
         subject = f"[{config.cf_title}] 회원가입 인증메일 발송"
         body = templates.TemplateResponse(
-            "bbs/mail_form/register_certify_mail.html",
+            "bbs/mail_form/register_certify_mail.html.jinja",
             {
                 "request": request,
                 "member": member,
@@ -327,7 +327,7 @@ async def post_social_register(
     if config.cf_email_mb_super_admin:
         subject = f"[{config.cf_title}] {member.mb_nick} 님께서 회원으로 가입하셨습니다."
         body = templates.TemplateResponse(
-            "bbs/mail_form/register_send_admin_mail.html",
+            "bbs/mail_form/register_send_admin_mail.html.jinja",
             {
                 "request": request,
                 "member": member,

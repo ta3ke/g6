@@ -36,7 +36,7 @@ async def menu_list(request: Request, db: db_session):
             menu.subclass = False
 
     context = {"request": request, "menus": menus}
-    return templates.TemplateResponse("menu_list.html", context)
+    return templates.TemplateResponse("menu_list.html.jinja", context)
 
 
 @router.get("/menu_form")
@@ -58,7 +58,7 @@ async def menu_form(
         "code": code,
         "action": action
     }
-    return templates.TemplateResponse("menu_form.html", context)
+    return templates.TemplateResponse("menu_form.html.jinja", context)
 
 
 @router.post("/menu_form_search", response_class=HTMLResponse)
@@ -95,7 +95,7 @@ async def menu_form_search(
         "type": type,
         "datas": datas
     }
-    return templates.TemplateResponse(f"menu_search_{type}.html", context)
+    return templates.TemplateResponse(f"menu_search_{type}.html.jinja", context)
 
 
 @router.post("/menu_list_update", dependencies=[Depends(validate_token)])

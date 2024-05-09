@@ -48,7 +48,7 @@ async def config_form(request: Request):
         "host_public_ip": host_public_ip,
         "client_ip": client_ip,
     }
-    return templates.TemplateResponse("config_form.html", context)
+    return templates.TemplateResponse("config_form.html.jinja", context)
 
 
 @router.post("/config_form_update",

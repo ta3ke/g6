@@ -52,4 +52,4 @@ async def show(request: Request):
         "content": f"Hello {module_name}",
         "module_name": module_name,
     }
-    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/admin_demo.html", context)
+    return templates.TemplateResponse(f"{plugin_config.TEMPLATE_PATH}/admin/admin_demo.html.jinja", context)

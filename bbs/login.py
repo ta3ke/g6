@@ -26,7 +26,7 @@ async def login_form(
         "request": request,
         "url": url
     }
-    return templates.TemplateResponse("bbs/login_form.html", context)
+    return templates.TemplateResponse("bbs/login_form.html.jinja", context)
 
 
 @router.post("/login")

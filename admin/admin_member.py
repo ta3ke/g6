@@ -88,7 +88,7 @@ async def member_list(
             request, search_params["current_page"], result["total_count"]
         ),
     }
-    return templates.TemplateResponse("member_list.html", context)
+    return templates.TemplateResponse("member_list.html.jinja", context)
 
 
 @router.post("/member_list_update", dependencies=[Depends(validate_token)])
@@ -223,7 +223,7 @@ async def member_form(
 
     context = {
         "request": request, "member": exists_member}
-    return templates.TemplateResponse("member_form.html", context)
+    return templates.TemplateResponse("member_form.html.jinja", context)
 
 
 # DB등록 및 수정

@@ -1,18 +1,17 @@
-{% extends "base.html" %}
+{% extends "base.html.jinja" %}
 {% block head %}
-    {# /plugin/플러그인 모듈이름/static/css/admin.css #}
-    {# css, js 경로 /plugin/플러그인 모듈이름/static/파일경로 #}
-
+  {# /plugin/플러그인 모듈이름/static/css/admin.css #}
+  {# css, js 경로 /plugin/플러그인 모듈이름/static/파일경로 #}
 {% endblock %}
 
 {% block title %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block subtitle %}
-    {{ title }}
+  {{ title }}
 {% endblock %}
 
 {% block content %}
-    plugin admin page
+  plugin admin page
 {% endblock %}

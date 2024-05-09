@@ -43,4 +43,4 @@ async def get_profile(
         "member": member_profile,
         "reg_after_date": member_after_regdate
     }
-    return templates.TemplateResponse("/member/member_profile.html", context)
+    return templates.TemplateResponse("/member/member_profile.html.jinja", context)

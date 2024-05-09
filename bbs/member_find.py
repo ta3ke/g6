@@ -29,7 +29,7 @@ async def find_member_id_form(request: Request):
     context = {
         "request": request
     }
-    return templates.TemplateResponse("/member/id_find_form.html", context)
+    return templates.TemplateResponse("/member/id_find_form.html.jinja", context)
 
 
 @router.post("/id_lost", dependencies=[Depends(validate_token), Depends(validate_captcha)])
@@ -65,7 +65,7 @@ async def find_member_id(
         "member_id": hide_member_id(member.mb_id),
         "register_date": member.mb_datetime.strftime("%Y-%m-%d %H:%M:%S")
     }
-    return templates.TemplateResponse(f"/member/id_find_result.html", context)
+    return templates.TemplateResponse(f"/member/id_find_result.html.jinja", context)
 
 
 @router.get("/password_lost")
@@ -81,7 +81,7 @@ async def find_member_password_form(request: Request):
         "request": request,
     }
     return templates.TemplateResponse(
-        f"/member/password_find_form.html", context)
+        f"/member/password_find_form.html.jinja", context)
 
 
 @router.post("/password_lost", dependencies=[Depends(validate_token), Depends(validate_captcha)])
@@ -119,7 +119,7 @@ async def find_member_password(
     # 비밀번호 재설정 링크 메일 발송
     subject = f"[{config.cf_title}] 요청하신 비밀번호 찾기 메일입니다."
     body = templates.TemplateResponse(
-        "bbs/mail_form/find_pasword_mail.html",
+        "bbs/mail_form/find_pasword_mail.html.jinja",
         {
             "request": request,
             "member": member,
@@ -168,7 +168,7 @@ async def reset_password_form(
         "member": member
     }
     return templates.TemplateResponse(
-        "/member/password_reset_form.html", context)
+        "/member/password_reset_form.html.jinja", context)
 
 
 @router.post("/password_reset/{mb_id}", dependencies=[Depends(validate_token), Depends(validate_captcha)])

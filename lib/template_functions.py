@@ -25,7 +25,7 @@ def editor_macro(request: Request) -> str:
     if not request.state.use_editor or not editor_name:
         editor_name = "textarea"
 
-    return editor_name + "/macros.html"
+    return editor_name + "/macros.html.jinja"
 
 
 def get_editor_select(id: str, selected: str) -> str:

@@ -33,4 +33,4 @@ async def content_view(
         "co_himg_url": head_img['img_url'] if head_img['img_exists'] else "",
         "co_timg_url": tail_img['img_url'] if tail_img['img_exists'] else "",
     }
-    return templates.TemplateResponse(f"/content/{content.co_skin}/content.html", context)
+    return templates.TemplateResponse(f"/content/{content.co_skin}/content.html.jinja", context)

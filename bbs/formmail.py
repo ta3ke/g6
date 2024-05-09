@@ -73,7 +73,7 @@ async def formmail(
         "to_email": email,
     }
 
-    return templates.TemplateResponse(f"bbs/formmail.html", context)
+    return templates.TemplateResponse(f"bbs/formmail.html.jinja", context)
 
 
 @router.post("/formmail_send", dependencies=[Depends(validate_token)])

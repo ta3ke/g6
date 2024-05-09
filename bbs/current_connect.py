@@ -41,4 +41,4 @@ async def current_connect(
         "request": request,
         "logins": logins,
     }
-    return templates.TemplateResponse("/bbs/current_connect.html", context)
+    return templates.TemplateResponse("/bbs/current_connect.html.jinja", context)

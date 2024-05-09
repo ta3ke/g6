@@ -20,7 +20,7 @@ async def show(request: Request):
 async def show(request: Request):
     """템플릿 출력예시"""
     return templates.TemplateResponse(
-        f"{plugin_config.TEMPLATE_PATH}/user_demo.html",
+        f"{plugin_config.TEMPLATE_PATH}/user_demo.html.jinja",
         {
             "request": request,
             "title": "Hello plugin Template!",

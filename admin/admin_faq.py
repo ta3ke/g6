@@ -32,7 +32,7 @@ async def faq_master_list(request: Request, db: db_session):
         "request": request,
         "faq_masters": faq_masters
     }
-    return templates.TemplateResponse("faq_master_list.html", context)
+    return templates.TemplateResponse("faq_master_list.html.jinja", context)
 
 
 @router.get("/faq_master_form")
@@ -44,7 +44,7 @@ async def faq_master_add_form(request: Request):
         "request": request,
         "faq_master": None
     }
-    return templates.TemplateResponse("faq_master_form.html", context)
+    return templates.TemplateResponse("faq_master_form.html.jinja", context)
 
 
 @router.post("/faq_master_form_update", dependencies=[Depends(validate_token)])
@@ -92,7 +92,7 @@ async def faq_master_update_form(
         "request": request,
         "faq_master": faq_master
     }
-    return templates.TemplateResponse("faq_master_form.html", context)
+    return templates.TemplateResponse("faq_master_form.html.jinja", context)
 
 
 @router.post("/faq_master_form_update/{fm_id}", dependencies=[Depends(validate_token)])
@@ -167,7 +167,7 @@ async def faq_list(
         "faq_master": faq_master,
         "faqs": faqs
     }
-    return templates.TemplateResponse("faq_list.html", context)
+    return templates.TemplateResponse("faq_list.html.jinja", context)
 
 
 @router.get("/faq_form/{fm_id}")
@@ -186,7 +186,7 @@ async def faq_add_form(
         "faq_master": faq_master,
         "faq": None
     }
-    return templates.TemplateResponse("faq_form.html", context)
+    return templates.TemplateResponse("faq_form.html.jinja", context)
 
 
 @router.post("/faq_form_update/{fm_id}", dependencies=[Depends(validate_token)])
@@ -218,7 +218,7 @@ async def faq_update_form(fa_id: int, request: Request, db: db_session):
         "faq_master": faq_master,
         "faq": faq
     }
-    return templates.TemplateResponse("faq_form.html", context)
+    return templates.TemplateResponse("faq_form.html.jinja", context)
 
 
 @router.post("/faq_form_update/{fm_id}/{fa_id}", dependencies=[Depends(validate_token)])

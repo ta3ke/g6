@@ -43,7 +43,7 @@ async def get_register(
     context = {
         "request": request
     }
-    return templates.TemplateResponse("/bbs/register.html", context)
+    return templates.TemplateResponse("/bbs/register.html.jinja", context)
 
 
 @router.post("/register")
@@ -91,7 +91,7 @@ async def get_register_form(request: Request):
         "form": form_context,
         "config": request.state.config,
     }
-    return templates.TemplateResponse("/member/register_form.html", context)
+    return templates.TemplateResponse("/member/register_form.html.jinja", context)
 
 
 @router.post("/register_form",
@@ -230,7 +230,7 @@ async def post_register_form(
     if config.cf_use_email_certify:
         subject = f"[{config.cf_title}] 회원가입 인증메일 발송"
         body = templates.TemplateResponse(
-            "bbs/mail_form/register_certify_mail.html",
+            "bbs/mail_form/register_certify_mail.html.jinja",
             {
                 "request": request,
                 "member": new_member,
@@ -242,7 +242,7 @@ async def post_register_form(
     elif config.cf_email_mb_member:
         subject = f"[{config.cf_title}] 회원가입을 축하드립니다."
         body = templates.TemplateResponse(
-            "bbs/mail_form/register_send_member_mail.html",
+            "bbs/mail_form/register_send_member_mail.html.jinja",
             {
                 "request": request,
                 "member": new_member,
@@ -254,7 +254,7 @@ async def post_register_form(
     if config.cf_email_mb_super_admin:
         subject = f"[{config.cf_title}] {new_member.mb_nick} 님께서 회원으로 가입하셨습니다."
         body = templates.TemplateResponse(
-            "bbs/mail_form/register_send_admin_mail.html",
+            "bbs/mail_form/register_send_admin_mail.html.jinja",
             {
                 "request": request,
                 "member": new_member,
@@ -292,7 +292,7 @@ async def register_result(
         "request": request,
         "member": member,
     }
-    return templates.TemplateResponse("/bbs/register_result.html", context)
+    return templates.TemplateResponse("/bbs/register_result.html.jinja", context)
 
 
 @router.get("/email_certify/{mb_id}")

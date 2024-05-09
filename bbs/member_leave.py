@@ -25,7 +25,7 @@ async def member_leave_form(
         "member": member,
         "action_url": request.url_for("member_leave")
     }
-    return templates.TemplateResponse("/member/member_confirm.html", context)
+    return templates.TemplateResponse("/member/member_confirm.html.jinja", context)
 
 
 @router.post("/member_leave", dependencies=[Depends(validate_token)])

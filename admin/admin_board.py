@@ -56,7 +56,7 @@ async def board_list(
         "total_count": result['total_count'],
         "paging": get_paging(request, search_params['current_page'], result['total_count']),
     }
-    return templates.TemplateResponse("board_list.html", context)
+    return templates.TemplateResponse("board_list.html.jinja", context)
 
 
 @router.post("/board_list_update", dependencies=[Depends(validate_token)])
@@ -194,7 +194,7 @@ async def board_form(request: Request, db: db_session):
         "board": board,
         "config": config,
     }
-    return templates.TemplateResponse("board_form.html", context)
+    return templates.TemplateResponse("board_form.html.jinja", context)
 
 
 @router.get("/board_form/{bo_table}")
@@ -210,7 +210,7 @@ async def board_form(
         "board": board,
         "config": request.state.config,
     }
-    return templates.TemplateResponse("board_form.html", context)
+    return templates.TemplateResponse("board_form.html.jinja", context)
 
 
 @router.post("/board_form_update", dependencies=[Depends(validate_token)])
@@ -292,7 +292,7 @@ async def board_copy(
         "request": request,
         "board": board
     }
-    return templates.TemplateResponse("board_copy.html", context)
+    return templates.TemplateResponse("board_copy.html.jinja", context)
 
 
 @router.post("/board_copy_update", dependencies=[Depends(validate_token)])

@@ -46,7 +46,7 @@ async def boardgroup_list(
         "request": request,
         "groups": result['rows'],
     }
-    return templates.TemplateResponse("boardgroup_list.html", context)
+    return templates.TemplateResponse("boardgroup_list.html.jinja", context)
 
 
 @router.post("/boardgroup_list_update", dependencies=[Depends(validate_token)])
@@ -115,7 +115,7 @@ async def boardgroup_form(request: Request):
     게시판그룹 등록 폼
     """
     context = {"request": request, "group": None}
-    return templates.TemplateResponse("boardgroup_form.html", context)
+    return templates.TemplateResponse("boardgroup_form.html.jinja", context)
 
 
 @router.get("/boardgroup_form/{gr_id}")
@@ -136,7 +136,7 @@ async def boardgroup_form(
         "group": group,
         "member_count": len(group.members)
     }
-    return templates.TemplateResponse("boardgroup_form.html", context)
+    return templates.TemplateResponse("boardgroup_form.html.jinja", context)
 
 
 @router.post("/boardgroup_form_update", dependencies=[Depends(validate_token)])

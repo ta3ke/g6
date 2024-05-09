@@ -52,7 +52,7 @@ async def theme(request: Request, db: db_session):
         "theme_list": theme_list,
         "total_count": len(theme_list)
     }
-    return templates.TemplateResponse("theme.html", context)
+    return templates.TemplateResponse("theme.html.jinja", context)
 
 
 @router.post("/theme_detail")
@@ -67,7 +67,7 @@ async def theme_detail(
         "request": request,
         "info": get_theme_info(theme)
     }
-    return templates.TemplateResponse("theme_detail.html", context)
+    return templates.TemplateResponse("theme_detail.html.jinja", context)
 
 
 @router.get("/theme_preview/{theme}")
@@ -82,7 +82,7 @@ async def theme_preview(
         "request": request,
         "info": get_theme_info(theme)
     }
-    return templates.TemplateResponse("theme_preview.html", context)
+    return templates.TemplateResponse("theme_preview.html.jinja", context)
 
 
 @router.post("/theme_update")

@@ -49,7 +49,7 @@ async def poll_list(
         "total_count": total_count,
         "paging": get_paging(request, search_params['current_page'], total_count),
     }
-    return templates.TemplateResponse("poll_list.html", context)
+    return templates.TemplateResponse("poll_list.html.jinja", context)
 
 
 @router.post("/poll_list_delete", dependencies=[Depends(validate_token)])
@@ -80,7 +80,7 @@ async def poll_form_add(request: Request):
     설문조사 등록 폼
     """
     context = {"request": request, "poll": None}
-    return templates.TemplateResponse("poll_form.html", context)
+    return templates.TemplateResponse("poll_form.html.jinja", context)
 
 
 @router.get("/poll_form/{po_id}")
@@ -94,7 +94,7 @@ async def poll_form_edit(
     """
     poll = db.get(Poll, po_id)
     context = {"request": request, "poll": poll}
-    return templates.TemplateResponse("poll_form.html", context)
+    return templates.TemplateResponse("poll_form.html.jinja", context)
 
 
 @router.post("/poll_form_update", dependencies=[Depends(validate_token)])

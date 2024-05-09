@@ -19,7 +19,7 @@ def show(request: Request):
 @router.get("/show_template")
 def show(request: Request):
     return templates.TemplateResponse(
-        f"{plugin_config.TEMPLATE_PATH}/user_demo.html",
+        f"{plugin_config.TEMPLATE_PATH}/user_demo.html.jinja",
         {
             "request": request,
             "title": f"Hello plugin Template!",

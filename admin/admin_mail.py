@@ -51,7 +51,7 @@ async def mail_list(
         "mails": result["rows"],
         "paging": get_paging(request, search_params["current_page"], result["total_count"]),
     }
-    return templates.TemplateResponse("mail_list.html", context)
+    return templates.TemplateResponse("mail_list.html.jinja", context)
 
 
 # @router.get("/mail_form")
@@ -67,7 +67,7 @@ async def mail_list(
 #         "member": request.state.login_member,
 #         "mail": None,
 #     }
-#     return templates.TemplateResponse("mail_form.html", context)
+#     return templates.TemplateResponse("mail_form.html.jinja", context)
 
 
 @router.get("/mail_form")  # 등록
@@ -93,7 +93,7 @@ async def mail_form(
         "member": request.state.login_member,
         "mail": mail,
     }
-    return templates.TemplateResponse("mail_form.html", context)
+    return templates.TemplateResponse("mail_form.html.jinja", context)
 
 
 @router.post("/mail_update", dependencies=[Depends(validate_token)])
@@ -238,7 +238,7 @@ async def mail_select_form(
         "member_count": member_count,
         "leave_count": leave_count,
     }
-    return templates.TemplateResponse("mail_select_form.html", context)
+    return templates.TemplateResponse("mail_select_form.html.jinja", context)
 
 
 @router.post("/mail_select_list", dependencies=[Depends(validate_token)])
@@ -326,7 +326,7 @@ async def mail_select_list(
         "ma_id": ma_id,
         "textarea_members_str": textarea_members_str,
     }
-    return templates.TemplateResponse("mail_select_list.html", extend)
+    return templates.TemplateResponse("mail_select_list.html.jinja", extend)
 
 
 @router.post("/mail_select_result", dependencies=[Depends(validate_token)], response_class=HTMLResponse)
@@ -342,7 +342,7 @@ async def mail_select_result(
         "request": request,
         "ma_id": ma_id,
     }
-    return templates.TemplateResponse("mail_select_result.html", context)
+    return templates.TemplateResponse("mail_select_result.html.jinja", context)
 
 
 @router.get("/mail_select_send")
@@ -442,4 +442,4 @@ async def mail_preview(
         "mail_subject": subject,
         "mail_content": content,
     }
-    return templates.TemplateResponse("mail_preview.html", context)
+    return templates.TemplateResponse("mail_preview.html.jinja", context)

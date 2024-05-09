@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- #
 
 from typing import Any, Dict, Optional
 
@@ -35,31 +36,21 @@ def regist_core_exception_handler(app: FastAPI) -> None:
     """애플리케이션 인스턴스에 예외처리 핸들러를 등록합니다."""
 
     @app.exception_handler(AlertException)
-    async def alert_exception_handler(
-            request: Request, exc: AlertException):
+    async def alert_exception_handler(request: Request, exc: AlertException):
         """AlertException 예외처리 handler 등록"""
-        context = {
-            "request": request,
-            "errors": exc.detail,
-            "url": exc.url
-        }
-        return template_response("alert.html", context, exc.status_code)
+        context = {"request": request, "errors": exc.detail, "url": exc.url}
+        return template_response("alert.html.jinja", context, exc.status_code)
 
     @app.exception_handler(AlertCloseException)
-    async def alert_close_exception_handler(
-            request: Request, exc: AlertCloseException):
+    async def alert_close_exception_handler(request: Request, exc: AlertCloseException):
         """AlertCloseException 예외처리 handler 등록"""
-        context = {
-            "request": request,
-            "errors": exc.detail
-        }
-        return template_response("alert_close.html", context, exc.status_code)
+        context = {"request": request, "errors": exc.detail}
+        return template_response("alert_close.html.jinja", context, exc.status_code)
 
 
 def template_response(
-        template_html: str,
-        context: Dict[str, Any],
-        status_code: int = 200) -> _TemplateResponse:
+    template_html: str, context: Dict[str, Any], status_code: int = 200
+) -> _TemplateResponse:
     """템플릿 응답 객체를 반환합니다.
 
     Args:
@@ -70,13 +61,12 @@ def template_response(
     Returns:
         _TemplateResponse: 템플릿 응답 객체
     """
+
     # 새로운 템플릿 응답 객체를 생성합니다.
     # - UserTemplates, AdminTemplates 클래스는 기본 컨텍스트 설정 시 DB를 조회하는데,
     #   처음 설치 시에는 DB가 없으므로 새로운 템플릿 응답 객체를 생성합니다.
     template = Jinja2Templates(directory=TemplateService.get_templates_dir())
     template.env.globals["theme_asset"] = theme_asset
     return template.TemplateResponse(
-        name=template_html,
-        context=context,
-        status_code=status_code
+        name=template_html, context=context, status_code=status_code
     )

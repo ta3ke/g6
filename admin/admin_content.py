@@ -35,7 +35,7 @@ async def content_list(request: Request, db: db_session):
         "request": request,
         "contents": contents,
     }
-    return templates.TemplateResponse("content_list.html", context)
+    return templates.TemplateResponse("content_list.html.jinja", context)
 
 
 @router.get("/content_form")
@@ -47,7 +47,7 @@ async def content_form_add(request: Request):
         "request": request,
         "content": None,
     }
-    return templates.TemplateResponse("content_form.html", context)
+    return templates.TemplateResponse("content_form.html.jinja", context)
 
 @router.get("/content_form/{co_id}")
 async def content_form_edit(
@@ -66,7 +66,7 @@ async def content_form_edit(
         "request": request,
         "content": content,
     }
-    return templates.TemplateResponse("content_form.html", context)
+    return templates.TemplateResponse("content_form.html.jinja", context)
 
 
 @router.post("/content_form_update", dependencies=[Depends(validate_token)])

@@ -24,7 +24,7 @@ async def visit_search(request: Request):
         "from_email": get_admin_email(request),
         "to_email": getattr(login_member, "mb_email", "")
     }
-    return templates.TemplateResponse("sendmail_test.html", context)
+    return templates.TemplateResponse("sendmail_test.html.jinja", context)
 
 
 @router.post("/sendmail_test_result", dependencies=[Depends(validate_token)])
@@ -50,4 +50,4 @@ async def sendmail_test_result(
         "request": request,
         "real_emails": real_emails,
     }
-    return templates.TemplateResponse("sendmail_test_result.html", context)
+    return templates.TemplateResponse("sendmail_test_result.html.jinja", context)

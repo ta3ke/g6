@@ -347,7 +347,7 @@ def render_visit_statistics(request: Request):
         "total": int(total)
     }
     templates = UserTemplates()
-    visit_template = templates.TemplateResponse("visit/basic.html", context)
+    visit_template = templates.TemplateResponse("visit/basic.html.jinja", context)
 
     return visit_template.body.decode("utf-8")
 

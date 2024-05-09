@@ -36,7 +36,7 @@ async def plugin_detail(request: Request, module_name: str = Form(...)):
         "name": info['plugin_name'],
         "info": info,
     }
-    return templates.TemplateResponse("plugin_detail.html", context)
+    return templates.TemplateResponse("plugin_detail.html.jinja", context)
 
 
 @router.get("/plugin_list")
@@ -52,7 +52,7 @@ async def show_plugins(request: Request):
         "total_count": len(info),
     }
 
-    return templates.TemplateResponse("plugin_list.html", context)
+    return templates.TemplateResponse("plugin_list.html.jinja", context)
 
 
 @router.post("/plugin_update")

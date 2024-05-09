@@ -110,7 +110,7 @@ async def poll_result(
         "etcs": etcs,
         "other_list": other_list
     }
-    return templates.TemplateResponse("/bbs/poll_result.html", context)
+    return templates.TemplateResponse("/bbs/poll_result.html.jinja", context)
 
 
 @router.post("/poll_etc_update/{po_id}", dependencies=[Depends(validate_token)])
@@ -155,7 +155,7 @@ async def poll_etc_update(
         email = config.cf_admin_email
         subject = f"[{config.cf_title}] 설문조사 - ({poll.po_subject}) 기타의견 메일"
         body = templates.TemplateResponse(
-            "bbs/mail_form/poll_etc_update_mail.html", {
+            "bbs/mail_form/poll_etc_update_mail.html.jinja", {
                 "request": request,
                 "subject": subject,
                 "mb_name": cut_name(request, pc_name),

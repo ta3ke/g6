@@ -36,7 +36,9 @@ form_cache = TTLCache(maxsize=1, ttl=60)
 async def main(request: Request):
     """설치 메인 페이지"""
     # 파이썬 버전
-    python_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    python_version = (
+        f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
     # fastapi 버전
     fastapi_version = f"{fastapi.__version__}"
     context = {
@@ -44,17 +46,19 @@ async def main(request: Request):
         "python_version": python_version,
         "fastapi_version": fastapi_version,
     }
-    return templates.TemplateResponse("main.html", context)
+    return templates.TemplateResponse("main.html.jinja", context)
 
 
-@router.get("/license", name="install_license", dependencies=[Depends(validate_install)])
+@router.get(
+    "/license", name="install_license", dependencies=[Depends(validate_install)]
+)
 async def license(request: Request):
     """라이선스 동의 페이지"""
     context = {
         "request": request,
         "license": read_license(),
     }
-    return templates.TemplateResponse("license.html", context)
+    return templates.TemplateResponse("license.html.jinja", context)
 
 
 @router.get("/form", dependencies=[Depends(validate_install)])
@@ -64,7 +68,8 @@ async def form(request: Request):
 
 
 @router.post("/form", name="install_form", dependencies=[Depends(validate_install)])
-async def form(request: Request, 
+async def form(
+    request: Request,
     agree: str = Form(None),
 ):
     """설치 폼 페이지"""
@@ -73,12 +78,14 @@ async def form(request: Request,
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("form.html", context)
+    return templates.TemplateResponse("form.html.jinja", context)
 
 
-@router.post("/",
-             name="install",
-             dependencies=[Depends(validate_token), Depends(validate_install)])
+@router.post(
+    "/",
+    name="install",
+    dependencies=[Depends(validate_token), Depends(validate_install)],
+)
 async def install(
     request: Request,
     form: InstallFrom = Depends(),
@@ -127,12 +134,14 @@ async def install(
         # 세션 초기화
         request.session.clear()
 
-        return templates.TemplateResponse("result.html", {"request": request})
+        return templates.TemplateResponse("result.html.jinja", {"request": request})
 
     except OperationalError as e:
         os.remove(ENV_PATH)
-        message = e._message().replace('"', r'\"').strip()
-        raise AlertException(f"설치가 실패했습니다. 데이터베이스 연결에 실패했습니다.\\n{message}")
+        message = e._message().replace('"', r"\"").strip()
+        raise AlertException(
+            f"설치가 실패했습니다. 데이터베이스 연결에 실패했습니다.\\n{message}"
+        )
 
     except Exception as e:
         os.remove(ENV_PATH)
@@ -141,7 +150,6 @@ async def install(
 
 @router.get("/process", dependencies=[Depends(validate_token)])
 async def install_process(request: Request):
-    
     async def install_event():
         db_connect = DBConnect()
         engine = db_connect.engine
@@ -168,8 +176,13 @@ async def install_process(request: Request):
 
             with SessionLocal() as db:
                 config_setup(db, form.admin_id, form.admin_email)
-                admin_member_setup(db, form.admin_id, form.admin_name,
-                                   form.admin_password, form.admin_email)
+                admin_member_setup(
+                    db,
+                    form.admin_id,
+                    form.admin_name,
+                    form.admin_password,
+                    form.admin_email,
+                )
                 content_setup(db)
                 qa_setup(db)
                 faq_master_setup(db)
@@ -179,14 +192,14 @@ async def install_process(request: Request):
                 yield "기본설정 정보 입력 완료"
 
             for board in default_boards:
-                dynamic_create_write_table(board['bo_table'], create_table=True)
+                dynamic_create_write_table(board["bo_table"], create_table=True)
             yield "게시판 테이블 생성 완료"
 
             setup_data_directory()
             yield "데이터 경로 생성 완료"
 
             yield f"[success] 축하합니다. {default_version} 설치가 완료되었습니다."
-        
+
         except Exception as e:
             os.remove(ENV_PATH)
             yield f"[error] 설치가 실패했습니다. {e}"
@@ -199,21 +212,19 @@ async def install_process(request: Request):
 def config_setup(db: Session, admin_id, admin_email):
     """환경설정 기본값 등록"""
     exists_config = db.scalar(
-        exists(models.Config)
-        .where(models.Config.cf_id == 1).select()
+        exists(models.Config).where(models.Config.cf_id == 1).select()
     )
     if not exists_config:
         db.execute(
             insert(models.Config).values(
-                cf_admin=admin_id,
-                cf_admin_email=admin_email,
-                **default_config
+                cf_admin=admin_id, cf_admin_email=admin_email, **default_config
             )
         )
 
 
-def admin_member_setup(db: Session, admin_id: str, admin_name : str,
-                       admin_password: str, admin_email: str):
+def admin_member_setup(
+    db: Session, admin_id: str, admin_name: str, admin_password: str, admin_email: str
+):
     """최고관리자 등록"""
     admin_member = db.scalar(
         select(models.Member).where(models.Member.mb_id == admin_id)
@@ -230,7 +241,7 @@ def admin_member_setup(db: Session, admin_id: str, admin_name : str,
                 mb_name=admin_name,
                 mb_nick=admin_name,
                 mb_email=admin_email,
-                **default_member
+                **default_member,
             )
         )
 
@@ -240,7 +251,8 @@ def content_setup(db: Session):
     for content in default_contents:
         exists_content = db.scalar(
             exists(models.Content)
-            .where(models.Content.co_id == content['co_id']).select()
+            .where(models.Content.co_id == content["co_id"])
+            .select()
         )
         if not exists_content:
             db.execute(insert(models.Content).values(**content))
@@ -249,9 +261,7 @@ def content_setup(db: Session):
 def qa_setup(db: Session):
     """Q&A 기본값 등록"""
 
-    exists_qa = db.scalar(
-        exists(models.QaConfig).select()
-    )
+    exists_qa = db.scalar(exists(models.QaConfig).select())
     if not exists_qa:
         db.execute(insert(models.QaConfig).values(**default_qa_config))
 
@@ -259,8 +269,7 @@ def qa_setup(db: Session):
 def faq_master_setup(db: Session):
     """FAQ Master 기본값 등록"""
     exists_faq_master = db.scalar(
-        exists(models.FaqMaster)
-        .where(models.FaqMaster.fm_id == 1).select()
+        exists(models.FaqMaster).where(models.FaqMaster.fm_id == 1).select()
     )
     if not exists_faq_master:
         db.execute(insert(models.FaqMaster).values(**default_faq_master))
@@ -269,8 +278,7 @@ def faq_master_setup(db: Session):
 def board_group_setup(db: Session):
     """게시판 그룹 기본값 생성"""
     exists_board_group = db.scalar(
-        exists(models.Group)
-        .where(models.Group.gr_id == default_gr_id).select()
+        exists(models.Group).where(models.Group.gr_id == default_gr_id).select()
     )
     if not exists_board_group:
         db.execute(insert(models.Group).values(**default_group))
@@ -281,7 +289,8 @@ def board_setup(db: Session):
     for board in default_boards:
         exists_board = db.scalar(
             exists(models.Board)
-            .where(models.Board.bo_table == board['bo_table']).select()
+            .where(models.Board.bo_table == board["bo_table"])
+            .select()
         )
         if not exists_board:
             query = insert(models.Board).values(**board, **default_board_data)

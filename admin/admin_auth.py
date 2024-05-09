@@ -79,7 +79,7 @@ async def auth_list(
         "auth_options": auth_options,
         "paging": get_paging(request, search_params['current_page'], result['total_count']),
     }
-    return templates.TemplateResponse("auth_list.html", context)
+    return templates.TemplateResponse("auth_list.html.jinja", context)
 
 
 @router.post("/auth_update", dependencies=[Depends(validate_token), Depends(validate_captcha)])

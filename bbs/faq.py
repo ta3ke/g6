@@ -49,4 +49,4 @@ async def faq_view(request: Request, db: db_session, fm_id: int = None):
         "fm_himg_url": fm_himg_url,
         "fm_timg_url": fm_timg_url,
     }
-    return templates.TemplateResponse("/faq/faq.html", context)
+    return templates.TemplateResponse("/faq/faq.html.jinja", context)

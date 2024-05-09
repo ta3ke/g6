@@ -70,7 +70,7 @@ async def visit_search(
         "total_records": total_records,
         "paging": get_paging(request, current_page, total_records),
     }
-    return templates.TemplateResponse("visit_search.html", context)
+    return templates.TemplateResponse("visit_search.html.jinja", context)
 
 
 @router.get("/visit_delete", tags=["admin_visit_delete"])
@@ -89,7 +89,7 @@ async def visit_delete(request: Request, db: db_session):
         "min_year": min_year,
         "now_year": now_year,
     }
-    return templates.TemplateResponse("visit_delete.html", context)
+    return templates.TemplateResponse("visit_delete.html.jinja", context)
 
 
 @router.post("/visit_delete_update",
@@ -214,7 +214,7 @@ async def visit_list(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_list.html", context)
+    return templates.TemplateResponse("visit_list.html.jinja", context)
 
 
 @router.get("/visit_domain", tags=["admin_visit_list"])
@@ -270,7 +270,7 @@ async def visit_domain(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_domain.html", context)
+    return templates.TemplateResponse("visit_domain.html.jinja", context)
 
 
 @router.get("/visit_browser", tags=["admin_visit_list"])
@@ -313,7 +313,7 @@ async def visit_browser(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_browser.html", context)
+    return templates.TemplateResponse("visit_browser.html.jinja", context)
 
 
 @router.get("/visit_os", tags=["admin_visit_list"])
@@ -356,7 +356,7 @@ async def visit_os(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_os.html", context)
+    return templates.TemplateResponse("visit_os.html.jinja", context)
 
 
 @router.get("/visit_device")
@@ -399,7 +399,7 @@ async def visit_device(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_device.html", context)
+    return templates.TemplateResponse("visit_device.html.jinja", context)
 
 
 @router.get("/visit_hour")
@@ -447,7 +447,7 @@ async def visit_hour(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_hour.html", context)
+    return templates.TemplateResponse("visit_hour.html.jinja", context)
 
 
 @router.get("/visit_weekday", tags=["admin_visit_list"])
@@ -508,7 +508,7 @@ async def visit_weekday(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_weekday.html", context)
+    return templates.TemplateResponse("visit_weekday.html.jinja", context)
 
 
 @router.get("/visit_date", tags=["admin_visit_list"])
@@ -551,7 +551,7 @@ async def visit_date(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_date.html", context)
+    return templates.TemplateResponse("visit_date.html.jinja", context)
 
 
 @router.get("/visit_month", tags=["admin_visit_list"])
@@ -594,7 +594,7 @@ async def visit_month(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_month.html", context)
+    return templates.TemplateResponse("visit_month.html.jinja", context)
 
 
 @router.get("/visit_year", tags=["admin_visit_list"])
@@ -637,7 +637,7 @@ async def visit_year(
         "fr_date": from_date,
         "to_date": to_date,
     }
-    return templates.TemplateResponse("visit_year.html", context)
+    return templates.TemplateResponse("visit_year.html.jinja", context)
 
 
 def count_by_field(list: list, field_name: str) -> list:

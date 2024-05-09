@@ -63,7 +63,7 @@ async def point_list(
         "sum_point": int(sum_point),
         "paging": get_paging(request, search_params['current_page'], result['total_count']),
     }
-    return templates.TemplateResponse("point_list.html", context)
+    return templates.TemplateResponse("point_list.html.jinja", context)
 
 
 @router.post("/point_update", dependencies=[Depends(validate_token)])

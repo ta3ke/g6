@@ -43,7 +43,7 @@ async def newwin_list(request: Request, db: db_session):
         "request": request,
         "newwins": newwins,
     }
-    return templates.TemplateResponse("newwin_list.html", context)
+    return templates.TemplateResponse("newwin_list.html.jinja", context)
 
 
 @router.get("/newwin_form")
@@ -52,7 +52,7 @@ async def newwin_form_add(request: Request):
     팝업 등록 폼
     """
     context = {"request": request, "newwin": None}
-    return templates.TemplateResponse("newwin_form.html", context)
+    return templates.TemplateResponse("newwin_form.html.jinja", context)
 
 
 @router.get("/newwin_form/{nw_id}")
@@ -64,7 +64,7 @@ async def newwin_form_edit(
     팝업 수정 폼
     """
     context = {"request": request, "newwin": newwin}
-    return templates.TemplateResponse("newwin_form.html", context)
+    return templates.TemplateResponse("newwin_form.html.jinja", context)
 
 
 @router.post("/newwin_form_update", dependencies=[Depends(validate_token)])

@@ -44,7 +44,7 @@ async def popular_list(
         "total_count": total_count,
         "paging": get_paging(request, search_params['current_page'], total_count),
     }
-    return templates.TemplateResponse("popular_list.html", context)
+    return templates.TemplateResponse("popular_list.html.jinja", context)
 
 
 @router.post("/popular/delete", dependencies=[Depends(validate_token)], tags=["admin_popular_list"])
@@ -124,4 +124,4 @@ async def popular_rank(
         "total_count": total_count,
         "paging": get_paging(request, current_page, total_count),
     }
-    return templates.TemplateResponse("popular_rank.html", context)
+    return templates.TemplateResponse("popular_rank.html.jinja", context)

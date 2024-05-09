@@ -312,4 +312,4 @@ async def write_count(request: Request, db: db_session,
         # "templatg": template,
         "graph_html": graph_html,
     }
-    return templates.TemplateResponse("write_count.html", context)
+    return templates.TemplateResponse("write_count.html.jinja", context)

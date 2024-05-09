@@ -52,7 +52,7 @@ async def check_member_form(
         "member": member,
         "action_url": request.url_for("member_password")
     }
-    return templates.TemplateResponse("/member/member_confirm.html", context)
+    return templates.TemplateResponse("/member/member_confirm.html.jinja", context)
 
 
 @router.post("/member_confirm", name='member_password')
@@ -103,7 +103,7 @@ async def member_profile(
         "member": member,
         "form": form_context,
     }
-    return templates.TemplateResponse("/member/register_form.html", context)
+    return templates.TemplateResponse("/member/register_form.html.jinja", context)
 
 
 @router.post("/member_profile/{mb_no}", name='member_profile_save',

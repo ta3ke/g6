@@ -20,4 +20,4 @@ async def service_view(request: Request):
     context = {
         "request": request,
     }
-    return templates.TemplateResponse("service.html", context)
+    return templates.TemplateResponse("service.html.jinja", context)

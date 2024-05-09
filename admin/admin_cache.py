@@ -21,7 +21,7 @@ async def cache_file_delete(request: Request, db: db_session):
     """
     request.session["menu_key"] = CACHE_MENU_KEY
 
-    return templates.TemplateResponse("cache_file_delete.html", {"request": request})
+    return templates.TemplateResponse("cache_file_delete.html.jinja", {"request": request})
 
 
 @router.get("/cache_file_deleting")

@@ -1067,7 +1067,7 @@ def send_write_mail(request: Request, board: Board, write: WriteBaseModel, origi
     for email in send_email_list:
         subject = f"[{config.cf_title}] {board.bo_subject} 게시판에 {act}이 등록되었습니다."
         body = templates.TemplateResponse(
-            "bbs/mail_form/write_update_mail.html", {
+            "bbs/mail_form/write_update_mail.html.jinja", {
                 "request": request,
                 "act": act,
                 "board": board,
@@ -1372,7 +1372,7 @@ def render_latest_posts(request: Request, skin_name: str = 'basic', bo_table: st
 
     device = request.state.device
     file_cache = FileCache()
-    cache_filename = f"latest-{bo_table}-{device}-{skin_name}-{rows}-{subject_len}-{file_cache.get_cache_secret_key()}.html"
+    cache_filename = f"latest-{bo_table}-{device}-{skin_name}-{rows}-{subject_len}-{file_cache.get_cache_secret_key()}.html.jinja"
     cache_file = os.path.join(file_cache.cache_dir, cache_filename)
 
     # 캐시된 파일이 있으면 파일을 읽어서 반환
@@ -1405,7 +1405,7 @@ def render_latest_posts(request: Request, skin_name: str = 'basic', bo_table: st
         "writes": writes,
         "bo_table": bo_table,
     }
-    temp = templates.TemplateResponse(f"latest/{skin_name}.html", context)
+    temp = templates.TemplateResponse(f"latest/{skin_name}.html.jinja", context)
     temp_decode = temp.body.decode("utf-8")
 
     # 캐시 파일 생성
